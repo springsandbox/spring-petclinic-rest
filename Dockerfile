@@ -1,5 +1,5 @@
 # Use an OpenJDK runtime as a base image
-FROM adoptopenjdk/openjdk11:alpine-jre
+FROM adoptopenjdk:16-jre
 
 # Set the working directory in the container
 WORKDIR /app
