@@ -44,11 +44,12 @@ jobs:
             TAG=v$CIRCLE_BUILD_NUM
             kustomize edit set image $APP_NAME=$DOCKERHUB_USERNAME/petclinic_backend:$TAG
             cd ..
-            git config user.email "$GITHUB_EMAIL"
+            git config user.email $GITHUB_EMAIL
             git config user.name "CircleCI User"
             git checkout main
             git add kubernetes/kustomization.yaml
             git commit -am "Bumps docker tag [skip ci]"
+            echo $GITHUB_EMAIL
             git push origin main
 workflows:
   version: 2
