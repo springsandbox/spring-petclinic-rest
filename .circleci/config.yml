@@ -18,6 +18,7 @@ jobs:
             cd ./spring-petclinic-rest
             ./mvnw clean install
             TAG=v$CIRCLE_BUILD_NUM
+            echo "$TAG"
             docker build -t $DOCKERHUB_USERNAME/petclinic_backend:$TAG .
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
             docker push $DOCKERHUB_USERNAME/petclinic_backend:$TAG
@@ -42,6 +43,7 @@ jobs:
             git clone "https://$GITHUB_ACCESS_TOKEN@github.com/kirubakarthikeyan/spring-cluster.git"
             cd ./spring-cluster/kubernetes
             TAG=v$CIRCLE_BUILD_NUM
+            echo "$TAG"
             kustomize edit set image docker.io/$DOCKERHUB_USERNAME/petclinic_backend:$TAG
             cd ..
             git config user.email "$GITHUB_EMAIL"
