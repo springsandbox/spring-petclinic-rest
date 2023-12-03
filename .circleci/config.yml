@@ -34,6 +34,11 @@ jobs:
       - run:
           name: Update docker image
           command: |
+            URL=https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v4.5.2/kustomize_v4.5.2_linux_amd64.tar.gz
+            curl -L $URL | tar zx
+            [ -w /usr/local/bin ] && SUDO="" || SUDO=sudo
+            $SUDO chmod +x ./kustomize
+            $SUDO mv ./kustomize /usr/local/bin
             git clone https://github.com/kirubakarthikeyan/spring-cluster.git
             cd ./spring-cluster/kubernetes
             TAG=v$CIRCLE_BUILD_NUM
