@@ -8,6 +8,9 @@ jobs:
           password: $DOCKERHUB_PASSWORD
     steps:
       - setup_remote_docker
+      - add_ssh_keys:
+          fingerprints:
+            - "94:22:51:2e:48:90:2e:ff:7c:a0:80:1d:a0:6c:33:55"
       - run:
           name: Build and push backend application image
           command: |
