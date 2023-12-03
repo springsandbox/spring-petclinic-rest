@@ -43,6 +43,7 @@ jobs:
             cd ./spring-cluster/kubernetes
             TAG=v$CIRCLE_BUILD_NUM
             kustomize edit set image $APP_NAME=$DOCKERHUB_USERNAME/petclinic_backend:$TAG
+            cd ..
             git config user.email "$GITHUB_EMAIL"
             git config user.name "CircleCI User"
             git checkout main
