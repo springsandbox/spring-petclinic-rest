@@ -17,9 +17,8 @@ jobs:
             git clone https://github.com/kirubakarthikeyan/spring-petclinic-rest.git
             cd ./spring-petclinic-rest
             ./mvnw clean install
-            TAG=v$CIRCLE_BUILD_NUM
-            echo "$TAG"
-            docker build -t $DOCKERHUB_USERNAME/petclinic_backend:$TAG .
+            DOCKER_TAG=$(echo $CIRCLE_SHA1 | head -c 7)
+            docker build -t $DOCKERHUB_USERNAME/petclinic_backend:vDOCKER_TAG .
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
             docker push $DOCKERHUB_USERNAME/petclinic_backend:$TAG
   deploy:
@@ -42,9 +41,8 @@ jobs:
             $SUDO mv ./kustomize /usr/local/bin
             git clone "https://$GITHUB_ACCESS_TOKEN@github.com/kirubakarthikeyan/spring-cluster.git"
             cd ./spring-cluster/kubernetes
-            TAG=v$CIRCLE_BUILD_NUM
-            echo "$TAG"
-            kustomize edit set image docker.io/$DOCKERHUB_USERNAME/petclinic_backend:$TAG
+            DOCKER_TAG=$(echo $CIRCLE_SHA1 | head -c 7)
+            kustomize edit set image docker.io/$DOCKERHUB_USERNAME/petclinic_backend:v$DOCKER_TAG
             cd ..
             git config user.email "$GITHUB_EMAIL"
             git config user.name "CircleCI User"
