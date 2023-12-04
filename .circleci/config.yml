@@ -20,7 +20,7 @@ jobs:
             DOCKER_TAG=$(echo $CIRCLE_SHA1 | head -c 7)
             docker build -t $DOCKERHUB_USERNAME/petclinic_backend:$DOCKER_TAG .
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
-            docker push $DOCKERHUB_USERNAME/petclinic_backend:$TAG
+            docker push $DOCKERHUB_USERNAME/petclinic_backend:$DOCKER_TAG
   deploy:
     docker:
       - image: cimg/base:2023.12
