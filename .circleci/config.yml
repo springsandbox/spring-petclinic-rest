@@ -11,15 +11,47 @@ jobs:
       - run:
           name: Build and push backend application image
           command: |
-            git clone https://github.com/kirubakarthikeyan/spring-petclinic-rest.git
+            git clone https://github.com/springsandbox/spring-petclinic-rest.git
             cd ./spring-petclinic-rest
             ./mvnw clean install
             DOCKER_TAG=$(echo $CIRCLE_SHA1 | head -c 7)
             docker build -t $DOCKERHUB_USERNAME/petclinic_backend:$DOCKER_TAG .
             echo $DOCKERHUB_PASSWORD | docker login -u $DOCKERHUB_USERNAME --password-stdin
             docker push $DOCKERHUB_USERNAME/petclinic_backend:$DOCKER_TAG
+  deploy:
+    docker:
+      - image: cimg/base:2023.12
+        auth:
+          username: $DOCKERHUB_USERNAME
+          password: $DOCKERHUB_PASSWORD
+    steps:
+      - add_ssh_keys:
+          fingerprints:
+            - "94:22:51:2e:48:90:2e:ff:7c:a0:80:1d:a0:6c:33:55"
+      - run:
+          name: Update docker image
+          command: |
+            URL=https://github.com/kubernetes-sigs/kustomize/releases/download/kustomize/v4.5.2/kustomize_v4.5.2_linux_amd64.tar.gz
+            curl -L $URL | tar zx
+            [ -w /usr/local/bin ] && SUDO="" || SUDO=sudo
+            $SUDO chmod +x ./kustomize
+            $SUDO mv ./kustomize /usr/local/bin
+            git clone "https://$GITHUB_ACCESS_TOKEN@github.com/springsandbox/infra.git"
+            cd ./infra
+            DOCKER_TAG=$(echo $CIRCLE_SHA1 | head -c 7)
+            kustomize edit set image docker.io/$DOCKERHUB_USERNAME/petclinic_backend:$DOCKER_TAG
+            cd ..
+            git config user.email "$GITHUB_EMAIL"
+            git config user.name "CircleCI User"
+            git checkout main
+            git add kubernetes/kustomization.yaml
+            git commit -am "Bumps docker tag [skip ci]"
+            git push origin main
 workflows:
   version: 2
   build:
     jobs:
       - build
+      - deploy:
+          requires:
+            - build
