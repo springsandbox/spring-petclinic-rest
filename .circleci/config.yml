@@ -34,7 +34,7 @@ jobs:
             $SUDO chmod +x ./kustomize
             $SUDO mv ./kustomize /usr/local/bin
             git clone "https://$GITHUB_ACCESS_TOKEN@github.com/springsandbox/infra.git"
-            cd ./infra
+            cd ./infra/kubernetes
             DOCKER_TAG=$(echo $CIRCLE_SHA1 | head -c 7)
             kustomize edit set image docker.io/$DOCKERHUB_USERNAME/petclinic_backend:$DOCKER_TAG
             cd ..
