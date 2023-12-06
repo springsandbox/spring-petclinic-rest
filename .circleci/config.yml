@@ -41,7 +41,7 @@ jobs:
             git config user.email "$GITHUB_EMAIL"
             git config user.name "CircleCI User"
             git checkout main
-            git add kubernetes/kustomization.yml
+            git add kubernetes/kustomization.yaml
             git commit -am "Bumps docker tag [skip ci]"
             git push origin main
 workflows:
