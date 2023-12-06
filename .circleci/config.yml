@@ -2,7 +2,7 @@ version: 2
 jobs:
   build:
     docker:
-      - image: 17-alpine
+      - image: cimg/openjdk:17.0.8
         auth:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
