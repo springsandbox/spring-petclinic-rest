@@ -11,7 +11,7 @@ jobs:
       - run:
           name: Build and push backend application image
           command: |
-            git clone https://github.com/springsandbox/spring-petclinic-rest.git
+            git clone https://github.com/kirubakarthikeyan/spring-petclinic-rest.git
             cd ./spring-petclinic-rest
             ./mvnw clean install
             DOCKER_TAG=$(echo $CIRCLE_SHA1 | head -c 7)
@@ -25,9 +25,6 @@ jobs:
           username: $DOCKERHUB_USERNAME
           password: $DOCKERHUB_PASSWORD
     steps:
-      - add_ssh_keys:
-          fingerprints:
-            - "94:22:51:2e:48:90:2e:ff:7c:a0:80:1d:a0:6c:33:55"
       - run:
           name: Update docker image
           command: |
